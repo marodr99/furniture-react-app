@@ -4,10 +4,12 @@ import LogIn from "./LogIn/LogIn";
 import {BrowserRouter as Router, Route, Routes} from "react-router-dom";
 import HomePage from "./HomePage/HomePage";
 import {PrivateRoute} from "./routes/PrivateRoute";
+import Spinner from "./Spinner/Spinner";
 
 function App() {
     return (
-        <ReactKeycloakProvider authClient={keycloak}>
+        <ReactKeycloakProvider authClient={keycloak}
+                               LoadingComponent={<Spinner/>}>
             <Router>
                 <Routes>
                     <Route path={"/home"}

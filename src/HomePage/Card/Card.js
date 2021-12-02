@@ -5,7 +5,7 @@ const Card = ({imageName, alt, cardTitle, cardColor, link}) => {
     return (
         <div className={containerClasses}>
             <a className="my-card-link" href={link}>
-                <img className="card-img-top" src={imageName} alt={alt} style={{width: "8rem", height: "8rem"}}/>
+                <img className="card-img-top p-2" src={imageName} alt={alt} style={{width: "8rem", height: "8rem"}}/>
                 <div className="card-body text-center">
                     <h5 className="card-title">{cardTitle}</h5>
                 </div>
