@@ -5,6 +5,7 @@ import {BrowserRouter as Router, Route, Routes} from "react-router-dom";
 import HomePage from "./HomePage/HomePage";
 import {PrivateRoute} from "./routes/PrivateRoute";
 import Spinner from "./Spinner/Spinner";
+import FurnitureView from "./Furniture/FurnitureView";
 
 function App() {
     return (
@@ -12,6 +13,8 @@ function App() {
                                LoadingComponent={<Spinner/>}>
             <Router>
                 <Routes>
+                    <Route path={"/furniture/*"}
+                           element={<PrivateRoute roles={["ADMIN", "EMPLOYEE"]}><FurnitureView/></PrivateRoute>}/>
                     <Route path={"/home"}
                            element={<PrivateRoute roles={["ADMIN", "EMPLOYEE"]}><HomePage/></PrivateRoute>}/>
                     <Route path={"/"} element={<LogIn/>}/>

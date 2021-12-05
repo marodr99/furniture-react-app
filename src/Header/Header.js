@@ -6,7 +6,7 @@ const Header = () => {
 
     return (
         <header>
-            <ul className="navbar bg-danger p-0">
+            <ul className="navbar bg-danger p-0" style={{height: "5em"}}>
                 <li className="list-inline text-white m-3 btn">
                     <Link to={"/home"} style={{textDecoration: 'none', color: "inherit"}}>Home Page</Link></li>
                 <li className="list-inline text-white m-3 btn" onClick={() => keycloak.logout()}>Log Out</li>
