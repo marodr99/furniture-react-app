@@ -9,12 +9,12 @@ const HomePage = () => {
     let reports = null
     let keycloakAccess = <Card imageName={"management.svg"} alt="management" cardTitle="Accounts"
                                cardColor="bg-secondary"
-                               link={`http://localhost:8090/auth/realms/furniture-app/account?referrer=${keycloak.clientId}`}
+                               link={`http://192.168.0.11:8090/auth/realms/furniture-app/account?referrer=${keycloak.clientId}`}
                                isLinkToExternalSite={true}/>
     if (keycloak.hasRealmRole("ADMIN")) {
         keycloakAccess = <Card imageName={"management.svg"} alt="management" cardTitle="Accounts"
                                cardColor="bg-secondary"
-                               link={`http://localhost:8090/auth/admin/furniture-app/console`}
+                               link={`http://192.168.0.11:8090/auth/admin/furniture-app/console`}
                                isLinkToExternalSite={true}/>
         reports = <Card imageName={"report.svg"} alt="Reports" cardTitle="Reports" cardColor="bg-success" link={"/"}/>
     }

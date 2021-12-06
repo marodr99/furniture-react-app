@@ -1,8 +1,9 @@
-import {useParams} from "react-router-dom";
+import {Route, Routes, useParams} from "react-router-dom";
 import {useEffect, useState} from "react";
 import axios from "axios";
 import FurnitureCard from "./FurnitureCard";
 import PageSwitcher from "../pageSwitcher/PageSwitcher";
+import FurnitureEditor from "./FurnitureEditor";
 
 const FurnitureListView = () => {
     let {furnitureType} = useParams();
@@ -16,7 +17,7 @@ const FurnitureListView = () => {
             .catch(error => console.log("Can not fetch furniture..."))
             .finally(setIsLoading(false))
     }, [furnitureType, page])
-    console.log(furniture)
+
     let furnitureList = null
     if (furniture.furnitureFromPage)
         furnitureList = furniture.furnitureFromPage.map(f => <FurnitureCard key={f.id} furniture={f}/>)
@@ -26,6 +27,9 @@ const FurnitureListView = () => {
                 {furnitureList}
             </div>
             <PageSwitcher totalNumberOfPages={furniture.totalNumberOfPages} setPage={setPage} page={page}/>
+            <Routes>
+                <Route path={':id'} element={<FurnitureEditor/>}/>
+            </Routes>
         </div>
     )
 }

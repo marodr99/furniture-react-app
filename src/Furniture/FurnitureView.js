@@ -19,7 +19,7 @@ const FurnitureView = () => {
             <Header/>
             <Routes>
                 <Route path={"/"} element={furnitureCards}/>
-                <Route path={"/:furnitureType"} element={<FurnitureListView/>}/>
+                <Route path={"/:furnitureType/*"} element={<FurnitureListView/>}/>
             </Routes>
         </div>
     )
