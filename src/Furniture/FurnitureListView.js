@@ -4,6 +4,7 @@ import axios from "axios";
 import FurnitureCard from "./FurnitureCard";
 import PageSwitcher from "../pageSwitcher/PageSwitcher";
 import FurnitureEditor from "./FurnitureEditor";
+import Card from "../HomePage/Card/Card";
 
 const FurnitureListView = () => {
     let {furnitureType} = useParams();
@@ -25,10 +26,13 @@ const FurnitureListView = () => {
         isLoading ? null : <div>
             <div style={{display: "flex", flexWrap: "wrap"}}>
                 {furnitureList}
+                <Card imageName={"/plus-line.svg"} alt={"Add"} cardTitle={"Add"} cardColor={"bg-warning"}
+                      link={`/furniture/${furnitureType}/add`}/>
             </div>
             <PageSwitcher totalNumberOfPages={furniture.totalNumberOfPages} setPage={setPage} page={page}/>
             <Routes>
                 <Route path={':id'} element={<FurnitureEditor/>}/>
+                <Route path={'/add'} element={<FurnitureEditor/>}/>
             </Routes>
         </div>
     )

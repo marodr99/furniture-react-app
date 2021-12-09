@@ -4,10 +4,30 @@ import {useEffect, useState} from "react";
 import axios from "axios";
 import FurnitureMaterials from "./FurnitureMaterials";
 import {useKeycloak} from "@react-keycloak/web";
+import {storage} from "../firebase/Firebase";
+import {ref, uploadBytes} from "firebase/storage"
 
 const FurnitureEditor = () => {
     let {furnitureType, id} = useParams();
-    let [furniture, setFurniture] = useState({});
+    let emptyFurniture = {
+        id: 0,
+        title: "",
+        price: 0,
+        imgUrl: "",
+        maxWeight: 0,
+        width: 0,
+        height: 0,
+        depth: 0,
+        additionalInformation: "",
+        stock: 0,
+        glbFile: "",
+        imagesUrl: "",
+        color: "",
+        material: "",
+        furnitureType: furnitureType
+    }
+    let [furniture, setFurniture] = useState(emptyFurniture);
+    let [glbFile, setGlbFile] = useState("");
     let [materials, setMaterials] = useState([])
     let [isLoading, setIsLoading] = useState(true);
     let {keycloak} = useKeycloak();
@@ -15,7 +35,7 @@ const FurnitureEditor = () => {
     useEffect(() => {
         axios.get(`http://localhost:8080/${furnitureType}/${id}`).then(response => {
             setFurniture(response.data)
-        }).catch(error => console.log("Can not get single furniture"))
+        }).catch(error => setFurniture(emptyFurniture))
         axios.get(`http://localhost:8080/${furnitureType}/search/options`).then(response => {
             setMaterials(response.data.material)
         }).catch(error => console.log("Can not get furniture materials")).finally(setIsLoading(false))
@@ -30,15 +50,40 @@ const FurnitureEditor = () => {
         }
     }
 
-    const handleOnClick = () => {
-        console.log(furniture)
-        console.log(keycloak.token)
-        axios.put("http://localhost:8080/furniture/edit", furniture, {headers: {'Authorization': `Bearer ${keycloak.token}`}})
+    let maxWeightFormInput = null
+    if (furnitureType === "chairs") {
+        maxWeightFormInput = (
+            <div className="form-group">
+                <label>Max weight</label>
+                <input className="form-control" placeholder={"Max weight"} type="number" value={furniture.maxWeight}
+                       onChange={(e) => setFurniture({...furniture, maxWeight: e.target.value})}/>
+            </div>
+        )
+    }
+
+    const handleOnClick = async () => {
+        let furnitureId = 0;
+        await axios.put("http://localhost:8080/furniture/edit", furniture, {headers: {'Authorization': `Bearer ${keycloak.token}`}})
             .then(r => {
                 console.log("Furniture edited successfuly")
-                window.location = `/furniture/${furnitureType}`
+                furnitureId = r.data.furnitureId
+                // window.location = `/furniture/${furnitureType}`
             })
             .catch(err => console.log("Can not edit furniture", err))
+
+        if (glbFile) {
+            const storageRef = ref(storage, `${furnitureId}.glb`);
+            await uploadBytes(storageRef, glbFile).then(r => console.log("Uploaded file to firebase"))
+                .catch(err => console.log("Error uploading file to firebase"));
+        }
+        window.location = `/furniture/${furnitureType}`
+    }
+
+    const handleDeleteOnClick = async () => {
+        await axios.delete(`http://localhost:8080/furniture/${furnitureType}/delete/${id}`)
+            .then(res => console.log("Successfully removed"))
+            .catch(err => console.log("Error removing"))
+        window.location = `/furniture/${furnitureType}`
     }
 
     return (
@@ -59,6 +104,7 @@ const FurnitureEditor = () => {
                     <input className="form-control" placeholder={"Main photo url"} type="text" value={furniture.imgUrl}
                            onChange={(e) => setFurniture({...furniture, imgUrl: e.target.value})}/>
                 </div>
+                {maxWeightFormInput}
                 <div className="form-group">
                     <label>Width</label>
                     <input className="form-control" placeholder={"Width"} type="number" value={furniture.width}
@@ -86,9 +132,9 @@ const FurnitureEditor = () => {
                            onChange={(e) => setFurniture({...furniture, stock: e.target.value})}/>
                 </div>
                 <div className="form-group">
-                    <label>Glb file name</label>
-                    <input className="form-control" placeholder={"Glb file name"} type="text" value={furniture.fileName}
-                           onChange={(e) => setFurniture({...furniture, fileName: e.target.value})}/>
+                    <label>Glb file</label>
+                    <input className="form-control" placeholder={"Glb file"} type="file"
+                           onChange={(e) => setGlbFile(e.target.files[0])}/>
                 </div>
                 <div className="form-group">
                     <label>Images url</label>
@@ -107,7 +153,9 @@ const FurnitureEditor = () => {
                         <FurnitureMaterials materials={materials}/>
                     </select>
                 </div>
-                <div style={{display: "flex", justifyContent: "center", marginTop: "1em"}}>
+                <div style={{display: "flex", justifyContent: "space-between", marginTop: "1em"}}>
+                    <button className="btn btn-danger" type="button" onClick={() => handleDeleteOnClick()}>Delete
+                    </button>
                     <button className="btn btn-warning" type="button" onClick={() => handleOnClick()}>Save</button>
                 </div>
             </form>
