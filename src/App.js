@@ -7,6 +7,7 @@ import {PrivateRoute} from "./routes/PrivateRoute";
 import Spinner from "./Spinner/Spinner";
 import FurnitureView from "./Furniture/FurnitureView";
 import OrdersView from "./orders/OrdersView";
+import ReportsPage from "./reports/ReportsPage";
 
 function App() {
     return (
@@ -14,6 +15,8 @@ function App() {
                                LoadingComponent={<Spinner/>}>
             <Router>
                 <Routes>
+                    <Route path={"/reports"}
+                           element={<PrivateRoute roles={["ADMIN"]}><ReportsPage/></PrivateRoute>}/>
                     <Route path={"/orders/*"}
                            element={<PrivateRoute roles={["ADMIN", "EMPLOYEE"]}><OrdersView/></PrivateRoute>}/>
                     <Route path={"/furniture/*"}

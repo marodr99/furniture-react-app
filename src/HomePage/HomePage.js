@@ -16,7 +16,8 @@ const HomePage = () => {
                                cardColor="bg-secondary"
                                link={`http://192.168.0.11:8090/auth/admin/furniture-app/console`}
                                isLinkToExternalSite={true}/>
-        reports = <Card imageName={"report.svg"} alt="Reports" cardTitle="Reports" cardColor="bg-success" link={"/"}/>
+        reports =
+            <Card imageName={"report.svg"} alt="Reports" cardTitle="Reports" cardColor="bg-success" link={"/reports"}/>
     }
     return (
         <div>
