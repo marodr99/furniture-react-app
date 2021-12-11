@@ -1,6 +1,7 @@
 import Header from "../Header/Header";
 import {useState} from "react";
 import axios from "axios";
+import generatePDF from "./reportGenerator";
 
 const ReportsPage = () => {
     let [startDate, setStartDate] = useState("");
@@ -68,6 +69,9 @@ const ReportsPage = () => {
                 </button>
             </div>
             <div className="m-3">
+                <button className="btn btn-primary m-3"
+                        onClick={() => generatePDF(reports, startDate, endDate)}>Generate report
+                </button>
                 <table className="table table-bordered table-dark">
                     <thead>
                     <tr>
