@@ -28,7 +28,7 @@ const HomePage = () => {
                 <Card imageName={"furniture.svg"} alt="furniture" cardTitle="Furniture" cardColor="bg-primary"
                       link={"/furniture"}/>
                 <Card imageName={"shopping-basket.svg"} alt="Orders" cardTitle="Orders" cardColor="bg-warning"
-                      link={"/"}/>
+                      link={"/orders"}/>
                 {reports}
             </div>
         </div>
