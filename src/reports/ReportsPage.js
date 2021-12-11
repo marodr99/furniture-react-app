@@ -2,11 +2,13 @@ import Header from "../Header/Header";
 import {useState} from "react";
 import axios from "axios";
 import generatePDF from "./reportGenerator";
+import {useKeycloak} from "@react-keycloak/web";
 
 const ReportsPage = () => {
     let [startDate, setStartDate] = useState("");
     let [endDate, setEndDate] = useState("");
     let [reports, setReports] = useState([]);
+    let {keycloak} = useKeycloak();
 
     const handleOnStartDateChange = (value) => {
         if (endDate) {
@@ -33,7 +35,7 @@ const ReportsPage = () => {
         await axios.post("http://localhost:8080/reports", {
             startDate: startDate.toString(),
             endDate: endDate.toString()
-        })
+        }, {headers: {'Authorization': `Bearer ${keycloak.token}`}})
             .then(res => {
                 console.log("Got reports successfully")
                 setReports(res.data)
